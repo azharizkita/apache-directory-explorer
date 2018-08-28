@@ -1,0 +1,4 @@
+  AddType text/html .php
+  Addhandler application/x-httpd-php .php
+  HeaderName /index.php
+  ReadmeName /footer.html
