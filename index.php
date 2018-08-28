@@ -13,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><?php echo $url ?> </title>
     <link href="<?php echo $root ?>/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo $root ?>/assets/css/offcanvas.css" rel="stylesheet">
     <link href="<?php echo $root ?>/assets/css/sticky-footer.css" rel="stylesheet">
     <script src="<?php echo $root ?>/assets/js/bytes.js"></script>
 </head>
@@ -227,8 +226,6 @@
 <script>window.jQuery || document.write('<script src="<?php echo $root?>/assets/js/jquery.min.js"><\/script>')</script>
 <script src="<?php echo $root ?>/assets/js/popper.min.js"></script>
 <script src="<?php echo $root ?>/assets/js/bootstrap.min.js"></script>
-<script src="<?php echo $root ?>/assets/js/holder.min.js"></script>
-<script src="<?php echo $root ?>/assets/js/offcanvas.js"></script>
 <script src="<?php echo $root ?>/assets/js/moment.js"></script>
 <script src="<?php echo $root ?>/assets/js/livestamp.min.js"></script>
 <script>
@@ -243,7 +240,7 @@ document.getElementById("mysql").onclick = function() {
 </body>
 
 <footer class="footer">
-    <div class="container text-center">
+    <div class="container text-center" style="padding-top: 15px">
         <div class="btn-group">
             <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled><?php echo apache_get_version();?></button>
             <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled><?php echo $_SERVER['SERVER_NAME'] ?>:<?php echo $_SERVER['SERVER_PORT'] ?></button>
