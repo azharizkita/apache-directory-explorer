@@ -1,7 +1,7 @@
 # apache-directory-listing
 Modernize your Apache directory browser.
 
-![](/documentation/demo.PNG)
+![](/documentation/demo.png)
 
 ## Installation
 Directly put everything on your server root directory.

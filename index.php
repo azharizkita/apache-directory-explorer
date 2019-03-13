@@ -18,7 +18,7 @@
 </head>
 
 <body class="bg-light">
-<div class="nav-scroller bg-white box-shadow" style="position: fixed; top: 0; width: 100%">
+<div class="nav-scroller bg-white navbar-white shadow" style="position: fixed; top: 0; width: 100%; z-index: 1000">
     <nav class="nav nav-underline" aria-label="breadcrumb">
         <a class="navbar-brand breadcrumb-item active" style="padding-left: 15px;"
            href="<?php echo $root ?>"><?php echo $rootName ?></a>
@@ -45,8 +45,7 @@
                         class="nav-link breadcrumb-item <?php echo $status ?>"><?php echo $urls;
                     ?></a>
                 <?php
-
-            } ?><?php
+            }
         }
         ?>
     </nav>
@@ -69,22 +68,6 @@
                 </div>
             </button>
         </div>
-
-        <div class="col">
-            <button id="mysql" class="btn d-flex align-items-center p-3 my-3 text-white-50 bg-warning rounded-right box-shadow" style="width: 100%">
-                <div class="p-2">
-                    <img class="mr-3" src="<?php echo $root ?>/assets/image/mysql-logo.svg" style="fill: black" alt="MySql"
-                        width="90"
-                        height="90">
-                </div>
-                <div class="p-2 flex-grow-1">
-                    <div class="lh-100 text-center">
-                        <h6 class="mb-0 text-dark lh-100">Click to open phpmyadmin</h6>
-                    </div>
-                </div>
-            </button>
-        </div>
-
     </div>
 
     <div class="row">
@@ -192,9 +175,14 @@
                                                     <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
                                                     <span
                                                data-livestamp="<?php echo filemtime($directoryUrl . $file) ?>"></span></button>
-                                               <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
-                                               <?php echo pathinfo($file, PATHINFO_EXTENSION);?>
-                                               </button>
+                                               <?php if (pathinfo($file, PATHINFO_EXTENSION) != NULL) {
+                                                   ?>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
+                                                    <?php echo pathinfo($file, PATHINFO_EXTENSION);?>
+                                                    </button>
+                                                   <?php
+                                               }
+                                               ?>
                                         </div>
                                     </div>
                                 </div>
