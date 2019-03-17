@@ -1,10 +1,21 @@
+<script>
+var itemList = [];
 <?php
     $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
     $rootName = $_SERVER['HTTP_HOST'];
     $url = "{$_SERVER['REQUEST_URI']}";
     $directoryUrl = __DIR__ . "$url";
     $scan = scandir($directoryUrl);
+    foreach ($scan as $value) {
+        ?>
+        if (('<?php echo $value?>' != '.') && ('<?php echo $value?>' != '..') ) {
+            itemList.push('<?php echo $value?>');  
+        }              
+        <?php
+    }
 ?>
+</script>
+
 
 <!doctype html>
 <html lang="en">
@@ -15,6 +26,7 @@
     <link href="<?php echo $root ?>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $root ?>/assets/css/sticky-footer.css" rel="stylesheet">
     <script src="<?php echo $root ?>/assets/js/bytes.js"></script>
+    
 </head>
 
 <body class="bg-light">
@@ -51,9 +63,8 @@
     </nav>
 </div>
 
-<main role="main" class="container" style="padding-top: 45px; padding-bottom: 20px">
+<main role="main" class="container" style="padding-top: 45px;">
     <div class="row">
-
         <div class="col">
             <button id="php" class="btn d-flex align-items-center p-3 my-3 text-white-50 bg-info rounded-left box-shadow" style="width: 100%">
                 <div class="p-2">
@@ -69,11 +80,17 @@
             </button>
         </div>
     </div>
-
     <div class="row">
-
+        <div class="col">
+        <hr>
+            <div class="d-flex p-3 my-3" style="width: 100%">
+                <input class="form-control" id="searchBox" type="search" placeholder="Search" aria-label="Search" style="width: 100% !important">
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col" style="padding-bottom: 20px">
-            <div class="card rounded box-shadow">
+            <div class="card rounded box-shadow" id="cardItems">
                 <br>
                 <h4 class="card-title text-center">Directory</h4>
                 <hr width="100%">
@@ -102,27 +119,28 @@
                             } else {
                                 ++$dc;
                                 $dt = $dt + directorySize($directoryUrl . $file); ?>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img src="<?php echo $root ?>/assets/image/icons/folder.svg"
-                                             style="width: 45px; height: 45px">
-                                        <a href="<?php echo $file ?>"><?php echo $file ?></a>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
-                                                        disabled><script>document.write(bytesToSize(<?php echo directorySize($directoryUrl . $file)?>));</script></button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
-                                                        disabled><?php echo directoryItems($directoryUrl . $file) . " items inside" ?></button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
-                                                        disabled><span data-livestamp="<?php echo filemtime($directoryUrl . $file) ?>"></span></button>
+                                <div class="searchableItem" id="<?php echo $file?>" style="padding-bottom: 20px">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img src="<?php echo $root ?>/assets/image/icons/folder.svg"
+                                                style="width: 45px; height: 45px">
+                                            <a href="<?php echo $file ?>"><?php echo $file ?></a>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
+                                                            disabled><script>document.write(bytesToSize(<?php echo directorySize($directoryUrl . $file)?>));</script></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
+                                                            disabled><?php echo directoryItems($directoryUrl . $file) . " items inside" ?></button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
+                                                            disabled><span data-livestamp="<?php echo filemtime($directoryUrl . $file) ?>"></span></button>
+                                                </div>
+                                                
                                             </div>
-                                            
                                         </div>
                                     </div>
                                 </div>
-                                <br>
                             <?php }
                         }
                     }
@@ -143,11 +161,11 @@
         </div>
 
         <div class="col">
-            <div class="card rounded box-shadow">
+            <div class="card rounded box-shadow cardItems">
                 <br>
                 <h4 class="card-title text-center">File</h4>
                 <hr width="100%">
-                <div class="container">
+                <div class="container" >
                     <?php
                     $fc = 0;
                     $fs = 0;
@@ -158,36 +176,35 @@
                             $fs = $fs + filesize($directoryUrl . $file);
                             $fileExt = explode(".", $file);
                             $Cext = end($fileExt);
-
                             ?>
-
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="<?php echo $root ?>/assets/image/icons/file.svg"
-                                         style="width: 45px; height: 45px" alt="">
-                                    <a href="<?php echo $file ?>"><?php echo $file ?></a>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
-                                                    disabled><script>document.write(bytesToSize(<?php echo filesize($directoryUrl . $file);?>));</script></button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
-                                                    <span
-                                               data-livestamp="<?php echo filemtime($directoryUrl . $file) ?>"></span></button>
-                                               <?php if (pathinfo($file, PATHINFO_EXTENSION) != NULL) {
-                                                   ?>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
-                                                    <?php echo pathinfo($file, PATHINFO_EXTENSION);?>
-                                                    </button>
-                                                   <?php
-                                               }
-                                               ?>
+                            <div class="searchableItem" id="<?php echo $file?>" style="padding-bottom: 20px">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <img src="<?php echo $root ?>/assets/image/icons/file.svg"
+                                            style="width: 45px; height: 45px" alt="">
+                                        <a href="<?php echo $file ?>"><?php echo $file ?></a>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary text-dark"
+                                                        disabled><script>document.write(bytesToSize(<?php echo filesize($directoryUrl . $file);?>));</script></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
+                                                        <span
+                                                data-livestamp="<?php echo filemtime($directoryUrl . $file) ?>"></span></button>
+                                                <?php if (pathinfo($file, PATHINFO_EXTENSION) != NULL) {
+                                                    ?>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary text-dark" disabled>
+                                                        <?php echo pathinfo($file, PATHINFO_EXTENSION);?>
+                                                        </button>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <br>
                         <?php }
                     }
                     if ($fc == 0) { ?>
@@ -216,12 +233,11 @@
 <script src="<?php echo $root ?>/assets/js/bootstrap.min.js"></script>
 <script src="<?php echo $root ?>/assets/js/moment.js"></script>
 <script src="<?php echo $root ?>/assets/js/livestamp.min.js"></script>
+
+<script src="<?php echo $root ?>/assets/js/main.js" defer></script>
 <script>
 document.getElementById("php").onclick = function() {
     window.location.href = "/phpinfo.php";
-};
-document.getElementById("mysql").onclick = function() {
-    window.location.href = "/phpmyadmin/";
 };
 </script>
 
